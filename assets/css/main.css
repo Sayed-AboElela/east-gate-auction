@@ -6,49 +6,49 @@
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-Bold.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-Bold.otf") format("opentype");
 	font-weight: bold;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-ExtraBold.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-ExtraBold.otf") format("opentype");
 	font-weight: 800;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-ExtraLight.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-ExtraLight.otf") format("opentype");
 	font-weight: 200;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-Light.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-Light.otf") format("opentype");
 	font-weight: 300;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-Medium.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-Medium.otf") format("opentype");
 	font-weight: 500;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-Regular.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-Regular.otf") format("opentype");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "TheYearofTheCamel";
-	src: url("/assets/fonts/TheYearofTheCamel-Thin.otf") format("opentype");
+	src: url("../fonts/TheYearofTheCamel-Thin.otf") format("opentype");
 	font-weight: 100;
 	font-style: normal;
 }
