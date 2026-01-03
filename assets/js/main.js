@@ -11,6 +11,12 @@ let defaultMapData = [];
 
 const cache = {};
 
+const ANIMATION_DURATION = 2000;
+
+function syncGlow(element) {
+	element.style("animation-delay", `-${Date.now() % ANIMATION_DURATION}ms`);
+}
+
 function saveData(key, value) {
 	localStorage.setItem(key, value);
 	cache[key] = value;
@@ -141,12 +147,17 @@ async function setupMap(events) {
 		.each(function (d) {
 			this.classList.add("unit");
 			this.classList.add(d);
+			if (d === "selected") {
+				syncGlow(d3.select(this));
+			} else {
+				d3.select(this).style("animation-delay", null);
+			}
 		});
 
 	// Get building circles and their positions
 	const buildingCircles = svg.selectAll(".building-circle");
 	const buildings = [];
-	buildingCircles.each(function() {
+	buildingCircles.each(function () {
 		const circle = d3.select(this);
 		buildings.push({
 			id: circle.attr("data-building"),
@@ -157,7 +168,7 @@ async function setupMap(events) {
 	});
 
 	// Calculate center point of each unit and assign to nearest building
-	units.each(function(d, i) {
+	units.each(function (d, i) {
 		const bbox = this.getBBox();
 		const centerX = bbox.x + bbox.width / 2;
 		const centerY = bbox.y + bbox.height / 2;
@@ -186,18 +197,18 @@ async function setupMap(events) {
 	buildingCircles
 		.style("cursor", "pointer")
 		.style("pointer-events", "all")
-		.on("click", function(event) {
+		.on("click", function (event) {
 			event.stopPropagation();
 			const buildingId = d3.select(this).attr("data-building");
 
 			// Find all units belonging to this building
-			const buildingUnits = units.filter(function() {
+			const buildingUnits = units.filter(function () {
 				return this.getAttribute("data-building") === buildingId;
 			});
 
 			// Check if all are already selected
 			let allSelected = true;
-			buildingUnits.each(function() {
+			buildingUnits.each(function () {
 				const datum = d3.select(this).datum();
 				if (datum !== "selected") {
 					allSelected = false;
@@ -205,19 +216,24 @@ async function setupMap(events) {
 			});
 
 			// Toggle: if all selected, deselect all; otherwise select all
-			buildingUnits.each(function() {
+			buildingUnits.each(function () {
 				const element = d3.select(this);
 				const currentState = element.datum();
 
 				// Only toggle if unit is in initial or selected state
 				if (currentState === "initial" || currentState === "selected") {
-					element.each(function(d) {
+					element.each(function (d) {
 						this.classList.remove(d);
 					});
 
 					const newState = allSelected ? "initial" : "selected";
-					element.datum(newState).each(function(d) {
+					element.datum(newState).each(function (d) {
 						this.classList.add(d);
+						if (d === "selected") {
+							syncGlow(d3.select(this));
+						} else {
+							d3.select(this).style("animation-delay", null);
+						}
 					});
 				}
 			});
@@ -236,6 +252,7 @@ async function setupMap(events) {
 			});
 			element.datum("selected").each(function (d) {
 				this.classList.add(d);
+				syncGlow(d3.select(this));
 			});
 			events?.unitClicked?.(element);
 		}
@@ -248,6 +265,7 @@ async function setupMap(events) {
 			});
 			element.datum("initial").each(function (d) {
 				this.classList.add(d);
+				d3.select(this).style("animation-delay", null);
 			});
 		}
 
@@ -264,6 +282,7 @@ async function setupMap(events) {
 			});
 			element.datum("initial").each(function (d) {
 				this.classList.add(d);
+				d3.select(this).style("animation-delay", null);
 			});
 		}
 
@@ -291,6 +310,11 @@ async function setupMap(events) {
 				this.classList.remove("initial", "selected", "completed");
 				this.classList.add("unit");
 				this.classList.add(d);
+				if (d === "selected") {
+					syncGlow(d3.select(this));
+				} else {
+					d3.select(this).style("animation-delay", null);
+				}
 			});
 			events?.mapData?.(data);
 		} else if (key === "values") {
