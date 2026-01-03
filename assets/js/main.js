@@ -134,6 +134,61 @@ async function setupMap(events) {
 		.classed("no-mouse", true)
 		.style("pointer-events", "none");
 
+	// Center unit number labels (st16 class) within their corresponding yellow units
+	const unitNumberTexts = svg.selectAll("text.st16");
+	unitNumberTexts.each(function() {
+		const textEl = d3.select(this);
+
+		// Parse the transform attribute to get actual position
+		const transform = textEl.attr("transform") || "";
+		const translateMatch = transform.match(/translate\(([^,\s]+)[,\s]+([^)]+)\)/);
+		if (!translateMatch) return;
+
+		const textX = parseFloat(translateMatch[1]);
+		const textY = parseFloat(translateMatch[2]);
+		const hasRotation = transform.includes("rotate");
+
+		// Find the unit that contains or is nearest to this text
+		let nearestUnit = null;
+		let minDistance = Infinity;
+
+		units.each(function() {
+			const unitBBox = this.getBBox();
+			const unitCenterX = unitBBox.x + unitBBox.width / 2;
+			const unitCenterY = unitBBox.y + unitBBox.height / 2;
+
+			const dx = textX - unitCenterX;
+			const dy = textY - unitCenterY;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				nearestUnit = this;
+			}
+		});
+
+		// If we found a nearby unit, center the text in it
+		if (nearestUnit && minDistance < 500) {
+			const unitBBox = nearestUnit.getBBox();
+			const unitCenterX = unitBBox.x + unitBBox.width / 2;
+			const unitCenterY = unitBBox.y + unitBBox.height / 2;
+
+			// Set text-anchor to middle for horizontal centering
+			textEl.attr("text-anchor", "middle")
+				.attr("dominant-baseline", "central");
+
+			// Apply new transform with center position (preserve rotation if present)
+			if (hasRotation) {
+				textEl.attr("transform", `translate(${unitCenterX}, ${unitCenterY}) rotate(-90)`);
+			} else {
+				textEl.attr("transform", `translate(${unitCenterX}, ${unitCenterY})`);
+			}
+
+			// Reset tspan positioning since we're using text-anchor now
+			textEl.select("tspan").attr("x", 0).attr("y", 0);
+		}
+	});
+
 	// Disable pointer events on all non-unit elements that might overlay units
 	// st6 polygons are stroke-only outlines that sit on top of units and block clicks
 	svg.selectAll(".st1, .st3, .st4, .st5, .st6, .st7, .st8, .st9, .st11, .st17, .st18, .st19, .st20")
@@ -165,6 +220,61 @@ async function setupMap(events) {
 			cy: parseFloat(circle.attr("cy")),
 			element: this
 		});
+	});
+
+	// Center building number labels (st15 class) within their white circles
+	const buildingNumberTexts = svg.selectAll("text.st15");
+	buildingNumberTexts.each(function() {
+		const textEl = d3.select(this);
+
+		// Parse the transform attribute to get actual position
+		const transform = textEl.attr("transform") || "";
+		const translateMatch = transform.match(/translate\(([^,\s]+)[,\s]+([^)]+)\)/);
+		if (!translateMatch) return;
+
+		const textX = parseFloat(translateMatch[1]);
+		const textY = parseFloat(translateMatch[2]);
+		const hasRotation = transform.includes("rotate");
+
+		// Find the building circle nearest to this text
+		let nearestCircle = null;
+		let minDistance = Infinity;
+
+		buildingCircles.each(function() {
+			const circle = d3.select(this);
+			const cx = parseFloat(circle.attr("cx"));
+			const cy = parseFloat(circle.attr("cy"));
+
+			const dx = textX - cx;
+			const dy = textY - cy;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				nearestCircle = this;
+			}
+		});
+
+		// If we found a nearby circle, center the text in it
+		if (nearestCircle && minDistance < 100) {
+			const circle = d3.select(nearestCircle);
+			const cx = parseFloat(circle.attr("cx"));
+			const cy = parseFloat(circle.attr("cy"));
+
+			// Set text-anchor to middle for horizontal centering
+			textEl.attr("text-anchor", "middle")
+				.attr("dominant-baseline", "central");
+
+			// Apply new transform with center position (preserve rotation if present)
+			if (hasRotation) {
+				textEl.attr("transform", `translate(${cx}, ${cy}) rotate(-90)`);
+			} else {
+				textEl.attr("transform", `translate(${cx}, ${cy})`);
+			}
+
+			// Reset tspan positioning since we're using text-anchor now
+			textEl.select("tspan").attr("x", 0).attr("y", 0);
+		}
 	});
 
 	// Calculate center point of each unit and assign to nearest building
