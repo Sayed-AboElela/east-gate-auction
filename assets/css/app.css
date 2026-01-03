@@ -24,7 +24,7 @@ section.side-details {
 		}
 	}
 
-	> .details-highlights {
+	>.details-highlights {
 		grid-area: highlights;
 		display: flex;
 		flex-direction: column;
@@ -50,7 +50,7 @@ section.side-details {
 				padding-top: 0.2em;
 				padding-inline: 0.5em;
 				font-weight: bolder;
-				font-size: 5rem;
+				font-size: 4rem;
 				background-color: #0f3c60;
 				border-radius: 20px;
 				color: white;
@@ -75,7 +75,7 @@ section.side-details {
 		}
 	}
 
-	> .details-content {
+	>.details-content {
 		grid-area: values;
 		font-size: 1.5rem;
 		font-weight: bolder;
@@ -123,7 +123,7 @@ section.side-details {
 	}
 }
 
-@container details (width <= 900px) {
+@container details (width <=900px) {
 	section.side-details {
 		column-gap: 1em !important;
 
@@ -141,14 +141,14 @@ section.side-details {
 	}
 }
 
-@container details (width <= 600px) {
+@container details (width <=600px) {
 	section.side-details {
 		grid-template-areas:
 			"logos"
 			"highlights"
 			"values";
 
-		> .details-highlights {
+		>.details-highlights {
 			flex-direction: row;
 			gap: 3em;
 			align-items: center;
@@ -169,21 +169,36 @@ section.side-details {
 	}
 }
 
-@container details (width >= 700px) {
+@container details (width >=700px) {
 	section.side-details {
 		padding: 1em;
 	}
 }
 
-@container details (width >= 1000px) {
+@container details (width >=1000px) {
 	section.side-details {
 		padding: 2em;
 	}
 }
 
-@container details (width >= 2000px) {
+@container details (width >=2000px) {
 	section.side-details {
 		padding: 4em;
 		row-gap: 6em !important;
 	}
+}
+
+.currency-icon {
+	height: 1em;
+	width: auto;
+	vertical-align: middle;
+	margin-inline-start: 0.2em;
+}
+
+#meter-price-display-2 .currency-icon {
+	filter: invert(31%) sepia(93%) saturate(1066%) hue-rotate(178deg) brightness(96%) contrast(91%);
+}
+
+#total-display .currency-icon {
+	filter: brightness(0) invert(1);
 }

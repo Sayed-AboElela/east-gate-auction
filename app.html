@@ -109,11 +109,12 @@
         unitsCountDisplay.innerText = unitsCount.toLocaleString();
         madrabNumDisplay.innerText = madrabNum.toLocaleString();
         unitsAreaDisplay.innerText = (unitArea * unitsCount).toLocaleString();
+        const currencyIcon = '<img src="assets/images/Saudi_Riyal_Symbol-1.png" alt="ريال" class="currency-icon" />';
         meterPriceDisplay.innerText = meterPrice.toLocaleString();
-        meterPriceDisplay2.innerText = `${meterPrice.toLocaleString()} ريـال`;
-        subtotalDisplay.innerText = `${subtotal.toLocaleString()} ريـال`;
-        taxDisplay.innerText = `${Number.parseInt(tax.toFixed(0)).toLocaleString()} ريـال`;
-        totalDisplay.innerText = `${Number.parseInt(total.toFixed(0)).toLocaleString()} ريـال`;
+        meterPriceDisplay2.innerHTML = `${meterPrice.toLocaleString()} ${currencyIcon}`;
+        subtotalDisplay.innerHTML = `${subtotal.toLocaleString()} ${currencyIcon}`;
+        taxDisplay.innerHTML = `${Number.parseInt(tax.toFixed(0)).toLocaleString()} ${currencyIcon}`;
+        totalDisplay.innerHTML = `${Number.parseInt(total.toFixed(0)).toLocaleString()} ${currencyIcon}`;
       }
     });
   </script>
