@@ -369,7 +369,7 @@ async function setupMap(events) {
 
 		if (d === "selected") {
 			const element = d3.select(this);
-			// change data to selected if equals initial
+			// change data to initial if equals selected
 			element.each(function (d) {
 				this.classList.remove(d);
 			});
